@@ -1,15 +1,144 @@
 <!DOCTYPE html>
- <html lang="en">
-   <head>
-     <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <title>myFlix</title>
-   </head>
-   <body>
-     <h1>Documentation</h1>
-     <p>This web application will provide users with access to information about
-       different movies, directors, and genres. Users will be able to sign up,
-       update their personal information, and create a list of their favorite
-       movies.</p>
-   </body>
- </html> 
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <title>myFlix</title>
+</head>
+
+<body>
+  <div class="container-fluid mt-4">
+    <h1>Documentation</h1>
+    <p class="text-justify font-weight-normal">This web application will provide users with access to information about
+      different movies, directors, and genres.Users will be able to sign up,<br>
+      update their personal information, and create a list of their favorite
+      movies.</p>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Request</th>
+            <th scope="col">URL</th>
+            <th scope="col">HTTP Method</th>
+            <th scope="col">Request body data format</th>
+            <th scope="col">Response body data format</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Get a list of all Movies</td>
+            <td>/movies</td>
+            <td class="text-success">GET</td>
+            <td>None</td>
+            <td>A JSON object holding<br>data about all Movies</td>
+          </tr>
+          <tr>
+            <td>Get data about a single Movie by Title</td>
+            <td>/movies/[title]</td>
+            <td class="text-success">GET</td>
+            <td>None</td>
+            <td>A JSON object holding<br>detailed data about a single Movie</td>
+          </tr>
+          <tr>
+            <td>Get data about a Movie genre by Name</td>
+            <td>/movies/genres/[name]</td>
+            <td class="text-success">GET</td>
+            <td>None</td>
+            <td>A JSON object holding<br>detailed data about a Movie genre</td>
+          </tr>
+          <tr>
+            <td>Get data about a Movie genre by Name</td>
+            <td>/movies/directors/[name]</td>
+            <td class="text-success">GET</td>
+            <td>None</td>
+            <td>A JSON object holding<br>detailed data about a Movie director</td>
+          </tr>
+          <tr>
+            <td>Add a User</td>
+            <td>/users</td>
+            <td class="text-warning">POST</td>
+            <td>A JSON object holding<br>data about the user to add, structured like:
+              <p class="text-primary">
+                {<br>
+                "username": "user name",<br>
+                "password": "user password",<br>
+                "data_of_birt": "users birt data",<br>
+                "email": "user emailadresse"<br>
+                }
+              </p>
+            </td>
+            <td>A JSON object holding<br>data about the user that was added, including an ID:
+              <p class="text-primary">
+                {<br>
+                "id": "1",<br>
+                "username": "user name",<br>
+                "password": "user password",<br>
+                "data_of_birt": "users birt data",<br>
+                "email": "user emailadresse"<br>
+                }
+              </p>
+            </td>
+          <tr>
+            <td>Update user info
+              <li class="text-primary">username</li>
+              <li class="text-primary">password</li>
+              <li class="text-primary">email</li>
+              <li class="text-primary">date of birth</li>
+            </td>
+            <td>/users/[username]</td>
+            <td class="text-primary">PUT</td>
+            <td>A JSON object holding data about<br> the user to change, structured like:
+              <p class="text-primary">
+                {<br>
+                "username": "user name",<br>
+                "password": "user password",<br>
+                "data_of_birt": "users birt data",<br>
+                "email": "user emailadresse"<br>
+                }
+              </p>
+            </td>
+            <td>A text message indicating the student info
+              <li class="text-primary">username</li>
+              <li class="text-primary">password</li>
+              <li class="text-primary">email</li>
+              <li class="text-primary">date of birth</li>
+              was updated
+            </td>
+          </tr>
+          <tr>
+            <td>Remove User by username</td>
+            <td>/users/[username]</td>
+            <td class="text-danger">DELETE</td>
+            <td>None</td>
+            <td>A text message indicating whether<br>the user was successfully removed</td>
+          </tr>
+          <tr>
+            <td>Add a movie to the user's favorites list</td>
+            <td>/users/[username]/favorites</td>
+              <td class="text-warning">POST</td>
+            <td>None</td>
+            <td>A message indicating the movie title<br>was added to the user's favorite list</td>
+          </tr>
+          <tr>
+            <td> Deleted a movie from the user's favorites list by title</td>
+            <td>/users/[username]/favorites/[title]</td>
+              <td class="text-danger">DELETE</td>
+            <td>None</td>
+            <td>A message indicating the movie title<br>was deleted from the user's favorite list</td>
+          </tr>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>

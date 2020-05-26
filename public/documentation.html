@@ -63,10 +63,10 @@
             <td>A JSON object holding<br>data about the user to add, structured like:
               <p class="text-primary">
                 {<br>
-                "username": "user name",<br>
-                "password": "user password",<br>
-                "data_of_birt": "users birt data",<br>
-                "email": "user emailadresse"<br>
+                "Username": "user name",<br>
+                "Password": "user password",<br>
+                "Email": "user emailadresse"<br>
+                "Birthday": "users bithday",<br>
                 }
               </p>
             </td>
@@ -74,37 +74,37 @@
               <p class="text-primary">
                 {<br>
                 "id": "1",<br>
-                "username": "user name",<br>
-                "password": "user password",<br>
-                "data_of_birt": "users birt data",<br>
-                "email": "user emailadresse"<br>
+                "Username": "user name",<br>
+                "Password": "user password",<br>
+                "Email": "user emailadresse"<br>
+                "Birthday": "users bithday",<br>
                 }
               </p>
             </td>
           <tr>
             <td>Update user info
-              <li class="text-primary">username</li>
-              <li class="text-primary">password</li>
-              <li class="text-primary">email</li>
-              <li class="text-primary">date of birth</li>
+              <li class="text-primary">Username</li>
+              <li class="text-primary">Password</li>
+              <li class="text-primary">Email</li>
+              <li class="text-primary">Birthday</li>
             </td>
             <td>/users/[username]</td>
             <td class="text-primary">PUT</td>
             <td>A JSON object holding data about<br> the user to change, structured like:
               <p class="text-primary">
                 {<br>
-                "username": "user name",<br>
-                "password": "user password",<br>
-                "data_of_birt": "users birt data",<br>
-                "email": "user emailadresse"<br>
+                "Username": "user name",<br>
+                "Password": "user password",<br>
+                "Email": "user emailadresse"<br>
+                "Birthday": "users bithday",<br>
                 }
               </p>
             </td>
             <td>A text message indicating the student info
-              <li class="text-primary">username</li>
-              <li class="text-primary">password</li>
-              <li class="text-primary">email</li>
-              <li class="text-primary">date of birth</li>
+              <li class="text-primary">Username</li>
+              <li class="text-primary">Password</li>
+              <li class="text-primary">Email</li>
+              <li class="text-primary">Birthday</li>
               was updated
             </td>
           </tr>
@@ -117,14 +117,14 @@
           </tr>
           <tr>
             <td>Add a movie to the user's favorites list</td>
-            <td>/users/[username]/favorites</td>
+            <td>/users/[username]/movies/[MoveID]</td>
               <td class="text-warning">POST</td>
             <td>None</td>
             <td>A message indicating the movie title<br>was added to the user's favorite list</td>
           </tr>
           <tr>
             <td> Deleted a movie from the user's favorites list by title</td>
-            <td>/users/[username]/favorites/[title]</td>
+            <td>/users/[username]/movies/[MovieID]</td>
               <td class="text-danger">DELETE</td>
             <td>None</td>
             <td>A message indicating the movie title<br>was deleted from the user's favorite list</td>

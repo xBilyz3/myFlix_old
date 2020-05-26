@@ -1,180 +1,227 @@
 const express = require('express'),
   bodyParser = require('body-parser'),
   morgan = require('morgan'),
-	uuid = require('uuid'),
-  app = express();
+  uuid = require('uuid'),
+  mongoose = require('mongoose'),
+  Models = require('./models.js');
 
-  app.use(bodyParser.json());
-  // Logging with Morgan
-  app.use(morgan('common'));
+const app = express();
+const Movies = Models.Movie;
+const Users = Models.User;
 
-// movies
-let movies = [{
-    title: 'The Shawshank Redemption'
-  },
-  {
-    title: 'The Godfather'
-  },
-  {
-    title: 'The Green Mile'
-  },
-]
+mongoose.connect('mongodb+srv://xbilyz3:LSRfbYYCvm5cL6Sg@myflix-gb1qj.mongodb.net/myFlixDB?retryWrites=true&w=majority', { 
+useNewUrlParser: true, useUnifiedTopology: true });
 
-let movieInfo = [{
-    title: 'The Shawshank Redemption',
-    director: 'Frank Darabont',
-    genre: 'Drama',
-    imgUrl: 'https://m.media-amazon.com/images/M/MV5BMDFkYTc0MGEtZmNhMC00ZDIzLWFmNTEtODM1ZmRlYWMwMWFmXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_QL50_.jpg',
-  },
-  {
-    title: 'The Godfather',
-    director: 'Francis Ford Coppola',
-    genre: ['Crime', 'Drama'],
-    imgUrl: 'https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_QL50_SY1000_CR0,0,704,1000_AL_.jpg',
-  },
-  {
-    title: 'The Green Mile',
-    director: 'Frank Darabont',
-    genre: ['Crime', 'Drama', 'Fantasy'],
-    description: 'The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift.',
-    imgUrl: 'https://m.media-amazon.com/images/M/MV5BMTUxMzQyNjA5MF5BMl5BanBnXkFtZTYwOTU2NTY3._V1_QL50_.jpg',
-  }
-];
-
-let genres = [{
-    name: 'Drama',
-    description: 'In film and television, drama is a genre of narrative fiction intended to be more serious than humorous in tone. Drama of this kind is usually qualified with additional terms that specify its particular subgenre, such as "police crime drama", "political drama", "legal drama", "historical drama", "domestic drama", "teen drama" or "comedy-drama".',
-  },
-  {
-    name: 'Crime',
-    description: 'Crime films, in the broadest sense, are a film genre inspired by and analogous to the crime fiction literary genre. Films of this genre generally involve various aspects of crime and its detection.',
-  },
-  {
-    name: 'Fantasy',
-    description: 'Fantasy films are films that belong to the fantasy genre with fantastic themes, usually magic, supernatural events, mythology, folklore, or exotic fantasy worlds. The genre is considered a form of speculative fiction alongside science fiction films and horror films, although the genres do overlap. Fantasy films often have an element of magic, myth, wonder, escapism, and the extraordinary',
-  },
-]
-
-let director = [{
-  name: 'Frank Darabont',
-	born: 'January 28, 1959 in Montbéliard, Doubs, France',
-	bio: 'Three-time Oscar nominee Frank Darabont was born in a refugee camp in 1959 in Montbeliard, France, the son of Hungarian parents who had fled Budapest during the failed 1956 Hungarian revolution. Brought to America as an infant, he settled with his family in Los Angeles and attended Hollywood High School. His first job in movies was as a production...',
-},
-{
-  name: 'Francis Ford Coppola',
-	born: 'April 7, 1939 in Detroit, Michigan, USA',
-	bio: 'Francis Ford Coppola was born in 1939 in Detroit, Michigan, but grew up in a New York suburb in a creative, supportive Italian-American family. His father, Carmine Coppola, was a composer and musician. His mother, Italia Coppola (née Pennino), had been an actress. Francis Ford Coppola graduated with a degree in drama from Hofstra University, and ...',
-},
-]
-
-let users = [
-  {
-    id: 1,
-    username: 'Jessica Drake',
-    password: '123',
-		data_of_birt: '12.03.1987',
-		email: 'test@test.com',
-    favorite: '',
-  },
-  {
-    id: 2,
-    username: 'Ben Cohen',
-		password: '1234',
-		data_of_birt: '21.09.1981',
-		email: '123@test.com',
-    favorite: '',
-  },
-  {
-    id: 3,
-    username: 'Lisa Downing',
-		password: '4321',
-		data_of_birt: '09.06.1970',
-		email: '4321@test.com',
-    favorite: '',
-  },
-];
+app.use(bodyParser.json());
+// Logging with Morgan
+app.use(morgan('common'));
 
 app.get('/', (req, res) => {
   res.send('<h1>' + '<b>Welcome to myFlix !<b>' + '</h1>');
 });
 
-// gets all movies
+// Get all MovieTitles with Description
 app.get('/movies', (req, res) => {
-  res.json(movies);
+  Movies.find()
+      .select('Title')
+        .select('Description')
+          .then((movies) => {
+            res.status(201).json(movies);
+          })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
-// gets single movie, by title
-app.get('/movies/:title', (req, res) => {
-  res.json(movieInfo.find((movie) => {
-    return movie.title === req.params.title
-  }));
+// Get a Movie by Title
+app.get('/movies/:Title', (req, res) => {
+  Movies.findOne({ Title: req.params.Title })
+    .then((movies) => {
+      res.status(201).json(movies);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
-// gets data about genre, by name
-app.get('/movies/genres/:genre', (req, res) => {
-  res.json(genres.find((genre) => {
-    return genre.name === req.params.genre
-  }));
+// Get a Genre by Name
+app.get('/movies/genres/:Name', (req, res) => {
+  Movies.findOne({ 'Genre.Name': req.params.Name })
+        .then((movies) => {
+          res.status(201).json(movies.Genre);
+        })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
-// returns data about a director, by name
-app.get('/movies/directors/:name', (req, res) => {
-  res.json(director.find((movie) => {
-    return movie.name === req.params.name
-  }));
+// Get a Director by Name
+app.get('/movies/directors/:Name', (req, res) => {
+  Movies.findOne({ 'Director.Name': req.params.Name })
+        .then((movies) => {
+          res.status(201).json(movies.Director);
+        })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
-// Adds data for a new user to our user list.
+
+// Get all users
+app.get('/users', (req, res) => {
+  Users.find()
+    .then((users) => {
+      res.status(201).json(users);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// Get a user by username
+app.get('/users/:Username', (req, res) => {
+  Users.findOne({ Username: req.params.Username })
+    .then((user) => {
+      res.json(user);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+//Add a user
+/* We’ll expect JSON in this format
+{
+  ID: Integer,
+  Username: String,
+  Password: String,
+  Email: String,
+  Birthday: Date
+}*/
 app.post('/users', (req, res) => {
-  let newUser = req.body;
-
-  if (!newUser.username) {
-    const message = 'Missing "name" in request body';
-    res.status(400).send(message);
-  } else {
-    newUser.id = uuid.v4();
-    users.push(newUser);
-    res.status(201).send(newUser);
-  }
+  Users.findOne({ Username: req.body.Username })
+    .then((user) => {
+      if (user) {
+        return res.status(400).send(req.body.Username + 'already exists');
+      } else {
+        Users
+          .create({
+            Username: req.body.Username,
+            Password: req.body.Password,
+            Email: req.body.Email,
+            Birthday: req.body.Birthday
+          })
+          .then((user) =>{res.status(201).json(user) })
+        .catch((error) => {
+          console.error(error);
+          res.status(500).send('Error: ' + error);
+        })
+      }
+    })
+.catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    });
 });
 
-// Update the a user's information
- app.put("/users/:username", (req, res) => {
-   res.send("User information updated.");
- });
-
-// Deletes a User from our list by username
-app.delete('/users/:username', (req, res) => {
-  let user = users.find((user) => {
-		return user.username === req.params.username });
-
-  if (user) {
-    user = users.filter((obj) => {
-			return obj.username !== req.params.username });
-    res.status(201).send('User: ' + req.params.username + ' removed succesfully.');
-  }
-});
-
-// Allow users to add a movie to their list of favorites
-app.post("/users/:username/favorites", (req, res) => {
-   res.send("Add favorite movie to users favorite list.");
- });
-
- // Deletes a movie from a user's favorites list by username
-  app.delete("/users/:username/favorites/:title", (req, res) => {
-    res.send("Movie successfully deleted from favorites.");
+// Update a user's info, by username
+/* We’ll expect JSON in this format
+{
+  Username: String,
+  (required)
+  Password: String,
+  (required)
+  Email: String,
+  (required)
+  Birthday: Date
+}*/
+app.put('/users/:Username', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, { $set:
+    {
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
+    }
+  },
+  { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if(err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+    }
   });
+});
+
+// Add a movie to a user's list of favorites
+app.post('/users/:Username/Movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+     $push: { FavoriteMovies: req.params.MovieID }
+   },
+   { new: true }, // This line makes sure that the updated document is returned
+  (err, updatedUser) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    } else {
+      res.json(updatedUser);
+      res.status(200).send(req.params.MovieID + ' was added to list of Favorites.');
+    }
+  });
+});
+
+// Delete a movie from user's list of favorites
+app.delete('/users/:Username/Movies/:MovieID', (req, res) => {
+  Users.findOneAndUpdate({ Username: req.params.Username }, {
+     $pull: { FavoriteMovies: req.params.MovieID }})
+   .then((updatedUser) => {
+      if (!updatedUser) {
+        res.status(400).send(req.params.MovieID + ' was not found');
+      } else {
+        res.status(200).send(req.params.MovieID + ' was deleted from the list of Favorites.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
+
+// Delete a user by username
+app.delete('/users/:Username', (req, res) => {
+  Users.findOneAndRemove({ Username: req.params.Username })
+    .then((user) => {
+      if (!user) {
+        res.status(400).send(req.params.Username + ' was not found');
+      } else {
+        res.status(200).send(req.params.Username + ' was deleted.');
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
+});
 
 // Serving Static Files
 app.use('/dev', express.static('public'));
 
-// Error Handling
+/// Error Handling
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-} else {
+  if(err){
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  } else {
     console.log('Added to log.');
   }
-  res.status(500).send('Something broke!');
 });
 
 // listen for requests

@@ -27,7 +27,7 @@ app.use(morgan('common'))
 
 let auth = require('./auth')(app)
 //creates a list of allowed domains
-let allowedOrigins = ['http://192.168.1.51:8080']
+let allowedOrigins = ['http://192.168.1.51:8080', 'http://192.168.1.51:1234']
 
 app.use(
   cors({
@@ -49,21 +49,18 @@ app.get('/', (req, res) => {
   res.send('<h1>' + '<b>Welcome to myFlix !<b>' + '</h1>')
 })
 
-// Get all MovieTitles with Description
+// Get all Movies
 app.get(
-  '/movies',
-  passport.authenticate('jwt', { session: false }),
-  (req, res) => {
-    Movies.find({}, { Title: 1, Description: 1 })
-      .then((movies) => {
-        res.status(201).json(movies)
-      })
-      .catch((err) => {
-        console.error(err)
-        res.status(500).send('Error: ' + err)
-      })
-  }
-)
+  '/movies', (req, res) => {
+  Movies.find()
+    .then((movies) => {
+      res.status(201).json(movies)
+    })
+    .catch((err) => {
+      console.error(err)
+      res.status(500).send('Error: ' + err)
+    })
+})
 
 // Get a Movie by Title
 app.get(

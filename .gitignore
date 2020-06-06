@@ -1,2 +1,9 @@
 # modal directory
 /node_modules/*
+/client/node_modules/*
+
+# parcel directory
+/client/dist/*
+
+# react
+/client/.cache

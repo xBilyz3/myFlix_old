@@ -1,0 +1,43 @@
+.overlay {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 100%;
+	width: 100%;
+	opacity: 0;
+	transition: 0.5s ease;
+	background-color: #333;
+}
+
+.card {
+	border-radius: 10px;
+	border: none;
+	min-width: 150px;
+}
+
+.card img {
+	transition: all 0.5s ease;
+}
+
+.card:hover img {
+	transform: scale(1.05);
+	transition: all 0.5s ease;
+}
+
+.card-body {
+	padding-left: 10px;
+}
+
+.card:hover {
+}
+
+.card-img-top {
+	border-radius: 10px 10px 10px 10px;
+	//width: 200px;
+}
+
+.row {
+	margin: 0 1px;
+}
